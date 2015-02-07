@@ -14,14 +14,11 @@ import java.util.TreeMap;
 public class EvaluationThreshold {
 
 	public static void main(String[] args) throws IOException {
-		String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/ectopicPregnancy/3to1/";
+		String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/breastCancer180/2to1/";
 		List<Integer> trueLable = new ArrayList<Integer>();
 		List<String> fileName = new ArrayList<String>();
 		List<Integer> prediction = new ArrayList<Integer>();
 		List<Double> value = new ArrayList<Double>();
-		Map<Double, Integer> truelabelMap = new TreeMap<Double, Integer>();
-		Map<Double, Integer> predictionMap = new TreeMap<Double, Integer>();
-		Map<Double, String> fileNameMap = new TreeMap<Double, String>();
 
 
 		// Read true labels
@@ -74,13 +71,25 @@ public class EvaluationThreshold {
 		}
 		
 		List<Integer> tmpPrediction = new ArrayList<Integer>();
-
+		Map<Double, Integer> truelabelMap = new TreeMap<Double, Integer>();
+		Map<Double, Integer> predictionMap = new TreeMap<Double, Integer>();
+		Map<Double, String> fileNameMap = new TreeMap<Double, String>();
+		final double eps = 0.00000001;
+				
 		for(int i=0; i<value.size(); ++i){
-			truelabelMap.put(value.get(i), trueLable.get(i));
-			predictionMap.put(value.get(i), prediction.get(i));
-			fileNameMap.put(value.get(i), fileName.get(i));
+			double ivalue = value.get(i);
+			
+			if(fileNameMap.containsKey(ivalue))
+			{
+				ivalue += eps;
+			}
+			
+			truelabelMap.put(ivalue, trueLable.get(i));
+			predictionMap.put(ivalue, prediction.get(i));
+			fileNameMap.put(ivalue, fileName.get(i));
 			tmpPrediction.add(+1);
 		}
+
 		List<Integer> sortedTrueLable = new ArrayList<Integer>();
 		List<Integer> sortedPrediction = new ArrayList<Integer>();
 		List<String> sortedfileName = new ArrayList<String>();

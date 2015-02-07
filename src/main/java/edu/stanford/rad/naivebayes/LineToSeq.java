@@ -29,7 +29,7 @@ import org.apache.hadoop.io.Text;
 /**
  * http://www.chimpler.com
  */
-public class TweetTSVToSeq {
+public class LineToSeq {
 	public static void main(String args[]) throws Exception {
 		if (args.length != 2) {
 			System.err.println("Arguments: [input tsv file] [output sequence file]");

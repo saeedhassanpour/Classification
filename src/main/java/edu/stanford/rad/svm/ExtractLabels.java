@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 public class ExtractLabels {
 
 	public static void main(String[] args) throws IOException {
-		String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/ectopicPregnancy/2to1/";
+		String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/spontaneusAbortion/2to1/";
 		File dataFile = new File(dataFileFolder + "test.txt" );
 		PrintWriter pw = new PrintWriter(dataFileFolder + "label-test.txt", "UTF-8");
 
@@ -29,3 +29,6 @@ public class ExtractLabels {
 	}
 
 }
+
+
+

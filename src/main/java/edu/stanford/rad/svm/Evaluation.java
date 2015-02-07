@@ -11,7 +11,7 @@ import java.util.List;
 public class Evaluation {
 
 	public static void main(String[] args) throws IOException {
-		String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/ectopicPregnancy/3to1/";
+		String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/breastCancer180/2to1/";
 		List<Integer> trueLable = new ArrayList<Integer>();
 		List<Integer> prediction = new ArrayList<Integer>();
 		
