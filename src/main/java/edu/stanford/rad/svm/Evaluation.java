@@ -11,12 +11,13 @@ import java.util.List;
 public class Evaluation {
 
 	public static void main(String[] args) throws IOException {
-		String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/breastCancer180/2to1/";
+		String tag = "test2";
+		String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/abdomenCT/t5/"+ tag +"/";
 		List<Integer> trueLable = new ArrayList<Integer>();
 		List<Integer> prediction = new ArrayList<Integer>();
 		
 		// Read true labels
-		File dataFile = new File(dataFileFolder + "label-test.txt");
+		File dataFile = new File(dataFileFolder + "label-"+tag+".txt");
 		BufferedReader bReader = new BufferedReader(new FileReader(dataFile));
 		String line;
 		while ((line = bReader.readLine()) != null) {
@@ -43,7 +44,7 @@ public class Evaluation {
 		}
 		
 		PrintWriter pw = new PrintWriter(dataFileFolder + "evaluation.tsv", "UTF-8");
-		pw.printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "threshold","accuracy", "precision", "recall", "f1", "sensitivity", "specificity", "tpr", "fpr");
+		pw.printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "threshold","size", "accuracy", "precision", "recall", "f1", "sensitivity", "specificity", "tpr", "fpr");
 		computeMetrics("", 0, trueLable, prediction, pw);
 		pw.close();
 	}
@@ -74,8 +75,9 @@ public class Evaluation {
 		double specificity = tn / (tn + fp);
 		double tpr = recall;
 		double fpr = fp / (fp + tn);
-		
-		pw.printf("%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\n", threshold, accuracy, precision, recall, f1, sensitivity,specificity,tpr,fpr);
+		int size = trueLable.size();
+				
+		pw.printf("%.4f\t%d\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\n", threshold, size, accuracy, precision, recall, f1, sensitivity,specificity,tpr,fpr);
 	}
 
 }

@@ -29,7 +29,7 @@ import org.apache.mahout.vectorizer.TFIDF;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
 
-public class VectorizeFiles {
+public class VectorizeTestFiles {
 	public static Map<String, Integer> readDictionnary(Configuration conf,
 			Path dictionnaryPath) {
 		Map<String, Integer> dictionnary = new HashMap<String, Integer>();
@@ -53,9 +53,9 @@ public class VectorizeFiles {
 
 	public static void main(String[] args) throws Exception {
 
-		String dictionaryPath = "/Users/saeedhp/Dropbox/Stanford/Code/NER/files/stride/ectopicPregnancy/vectors/TFIDFsparseSeqdir/dictionary.file-0";
-		String documentFrequencyPath = "/Users/saeedhp/Dropbox/Stanford/Code/NER/files/stride/ectopicPregnancy/vectors/TFIDFsparseSeqdir/df-count/part-r-00000";
-		String inputPath = "/Users/saeedhp/Dropbox/Stanford/Code/NER/files/stride/ectopicPregnancy/corpus/positive";
+		String dictionaryPath = "/Users/saeedhp/Dropbox/Stanford/Code/CorpusExtraction/files/stride/abdomenCT/vectors/TFIDFsparseSeqdir/dictionary.file-0";
+		String documentFrequencyPath = "/Users/saeedhp/Dropbox/Stanford/Code/CorpusExtraction/files/stride/abdomenCT/vectors/TFIDFsparseSeqdir/df-count/part-r-00000";
+		String inputPath = "/Users/saeedhp/Dropbox/Stanford/Code/CorpusExtraction/files/stride/abdomenCT/corpus/test/positive";
 		String outputFileName = "/Users/saeedhp/Desktop/tmp/a.txt";
 
 		Configuration configuration = new Configuration();

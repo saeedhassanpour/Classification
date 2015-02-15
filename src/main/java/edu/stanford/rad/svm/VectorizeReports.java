@@ -1,11 +1,14 @@
-package edu.stanford.rad.naivebayes;
+package edu.stanford.rad.svm;
 
 import java.io.File;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -14,9 +17,10 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.Writer;
 import org.apache.hadoop.io.Text;
-import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.core.LowerCaseFilter;
+import org.apache.lucene.analysis.shingle.ShingleFilter;
+import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.util.Version;
 import org.apache.mahout.common.Pair;
@@ -29,7 +33,9 @@ import org.apache.mahout.vectorizer.TFIDF;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
 
-public class VectorizeFiles {
+public class VectorizeReports {
+	
+	
 	public static Map<String, Integer> readDictionnary(Configuration conf,
 			Path dictionnaryPath) {
 		Map<String, Integer> dictionnary = new HashMap<String, Integer>();
@@ -52,12 +58,22 @@ public class VectorizeFiles {
 	}
 
 	public static void main(String[] args) throws Exception {
+		String tag = "test3";
+		String trainortest = "testSets";
+		String dictionaryPath = "/Users/saeedhp/Dropbox/Stanford/Code/CorpusExtraction/files/stride/abdomenCT/fullCorpus/vectors/TFIDFsparseSeqdir/dictionary.file-0";
+		String documentFrequencyPath = "/Users/saeedhp/Dropbox/Stanford/Code/CorpusExtraction/files/stride/abdomenCT/fullCorpus/vectors/TFIDFsparseSeqdir/df-count/part-r-00000";
+		//String inputPath = "/Users/saeedhp/Dropbox/Stanford/Code/CorpusExtraction/files/stride/abdomenCT/test1/"+tag+"/positive";
+		//String outputFileName = "/Users/saeedhp/Dropbox/Stanford/Code/CorpusExtraction/files/stride/abdomenCT/test1/"+tag+"/vector";
+		
+		//Final Training
+		String inputPath = "/Users/saeedhp/Dropbox/Stanford/Code/CorpusExtraction/files/stride/abdomenCT/corpus/"+trainortest +"/"+tag;
+		String outputFileName = "/Users/saeedhp/Dropbox/Stanford/Code/CorpusExtraction/files/stride/abdomenCT/corpus/vectors/vector-"+tag;
+		
+		//Full evaluation
+		//String inputPath = "/Users/saeedhp/Dropbox/Stanford/Code/CorpusExtraction/files/stride/abdomenCT/test1";
+		//String outputFileName = "/Users/saeedhp/Dropbox/Stanford/Code/CorpusExtraction/files/stride/abdomenCT/vector";
 
-		String dictionaryPath = "/Users/saeedhp/Dropbox/Stanford/Code/NER/files/stride/ectopicPregnancy/vectors/TFIDFsparseSeqdir/dictionary.file-0";
-		String documentFrequencyPath = "/Users/saeedhp/Dropbox/Stanford/Code/NER/files/stride/ectopicPregnancy/vectors/TFIDFsparseSeqdir/df-count/part-r-00000";
-		String inputPath = "/Users/saeedhp/Dropbox/Stanford/Code/NER/files/stride/ectopicPregnancy/corpus/positive";
-		String outputFileName = "/Users/saeedhp/Desktop/tmp/a.txt";
-
+		
 		Configuration configuration = new Configuration();
 		FileSystem fs = FileSystem.get(configuration);
 
@@ -69,29 +85,41 @@ public class VectorizeFiles {
 		Text key = new Text();
 		VectorWritable value = new VectorWritable();
 
-		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_46);
 
+		int counter = 0;
 		final File folder = new File(inputPath);
-		for (final File fileEntry : folder.listFiles()) {
-			if (!fileEntry.isDirectory() && !fileEntry.getName().startsWith(".")) {
+		List<File> files = (List<File>) FileUtils.listFiles(folder, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+		for (File fileEntry : files) {
+			if (!fileEntry.isDirectory() && !fileEntry.getName().startsWith(".")  && !fileEntry.getName().equals("vector")) {
+				++counter;
 				String fileName = fileEntry.getName();
 				String filepath = fileEntry.getPath();
 				System.out.println("Working on " + fileName + "...");
 				Scanner scanner = new Scanner(new File(filepath), "UTF-8");
 				String text = scanner.useDelimiter("\\Z").next();
 				scanner.close();
-
-				key.set(fileName);
+				
+				String sig = filepath.substring(filepath.lastIndexOf("/", filepath.lastIndexOf("/")-1));
+				key.set(sig);
 				Multiset<String> words = ConcurrentHashMultiset.create();
 
+				
+				
 				// extract words from input
-				TokenStream ts = analyzer.tokenStream("text", new StringReader(text));
-				CharTermAttribute termAtt = ts.addAttribute(CharTermAttribute.class);
-				ts.reset();
+				//Reader reader = new StringReader("This IS saeedhp@gmail.com 01/01/2012 a test string");
+				//TokenStream tokenizer = new StandardTokenizer(Version.LUCENE_46, reader);
+				TokenStream tokenizer = new StandardTokenizer(Version.LUCENE_46, new StringReader(text));
+				tokenizer = new LowerCaseFilter(Version.LUCENE_46, tokenizer);
+				//tokenizer = new PorterStemFilter(tokenizer);
+				//tokenizer = new StandardFilter(Version.LUCENE_46, tokenizer);
+				tokenizer = new ShingleFilter(tokenizer, 2, 3);
+				CharTermAttribute charTermAttribute = tokenizer.addAttribute(CharTermAttribute.class);
+				tokenizer.reset();
 				int wordCount = 0;
-				while (ts.incrementToken()) {
-					if (termAtt.length() > 0) {
-						String word = ts.getAttribute(CharTermAttribute.class).toString();
+				
+				while (tokenizer.incrementToken()) {
+					if (charTermAttribute.length() > 0) {
+						String word = charTermAttribute.toString();
 						Integer wordId = dictionary.get(word);
 						// if the word is not in the dictionary, skip it
 						if (wordId != null) {
@@ -100,8 +128,8 @@ public class VectorizeFiles {
 						}
 					}
 				}
-				ts.end();
-				ts.close();
+				tokenizer.end();
+				tokenizer.close();
 				
 				// create vector wordId => weight using tfidftmp
 				Vector vector = new RandomAccessSparseVector(10000);
@@ -120,7 +148,8 @@ public class VectorizeFiles {
 				writer.append(key, value);
 			}
 		}
-		analyzer.close();
 		writer.close();
+		System.out.println("Files: " + counter);
 	}
+	
 }

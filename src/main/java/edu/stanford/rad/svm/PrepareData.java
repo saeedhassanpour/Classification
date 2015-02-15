@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class PrepareData {
 
@@ -52,13 +54,20 @@ public class PrepareData {
 						svmLine.append("-1");
 						lpw.println("-1");
 					}
-
+					
+					TreeMap<Integer, Double> featureMap = new TreeMap<Integer, Double>();
 					String[] tokens = features.split(",");
 					for(String token : tokens)
 					{
 						String[] tokenParts = token.split(":");
 						int index = Integer.parseInt(tokenParts[0]) + 1; //indices start from 1
 						double value = Double.parseDouble(tokenParts[1]);
+						featureMap.put(index, value);
+					}
+					
+					for (Map.Entry<Integer, Double> entry : featureMap.entrySet()) {
+						int index = entry.getKey();
+						double value = entry.getValue();
 						svmLine.append(" " + index + ":" +value);
 					}
 					//System.out.println(svmLine.toString());

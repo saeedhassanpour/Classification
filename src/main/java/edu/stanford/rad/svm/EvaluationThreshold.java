@@ -14,7 +14,8 @@ import java.util.TreeMap;
 public class EvaluationThreshold {
 
 	public static void main(String[] args) throws IOException {
-		String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/breastCancer180/2to1/";
+		String tag = "testf";
+		String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/abdomenCT/cv3/"+ tag +"/";
 		List<Integer> trueLable = new ArrayList<Integer>();
 		List<String> fileName = new ArrayList<String>();
 		List<Integer> prediction = new ArrayList<Integer>();
@@ -22,7 +23,7 @@ public class EvaluationThreshold {
 
 
 		// Read true labels
-		File dataFile = new File(dataFileFolder + "label-test.txt");
+		File dataFile = new File(dataFileFolder + "label-"+tag+".txt");
 		BufferedReader bReader = new BufferedReader(new FileReader(dataFile));
 		String line;
 		while ((line = bReader.readLine()) != null) {
@@ -33,7 +34,7 @@ public class EvaluationThreshold {
 		bReader.close();
 		
 		// Read filenames
-		dataFile = new File(dataFileFolder + "fileNames-test.txt");
+		dataFile = new File(dataFileFolder + "fileNames-"+tag+".txt");
 		bReader = new BufferedReader(new FileReader(dataFile));
 		while ((line = bReader.readLine()) != null) {
 			if (line.isEmpty())
