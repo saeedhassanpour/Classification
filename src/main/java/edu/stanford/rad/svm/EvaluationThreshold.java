@@ -14,8 +14,8 @@ import java.util.TreeMap;
 public class EvaluationThreshold {
 
 	public static void main(String[] args) throws IOException {
-		String tag = "testf";
-		String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/abdomenCT/cv3/"+ tag +"/";
+		String tag = "test1";
+		String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/abdomenCT/t5/"+ tag +"/";
 		List<Integer> trueLable = new ArrayList<Integer>();
 		List<String> fileName = new ArrayList<String>();
 		List<Integer> prediction = new ArrayList<Integer>();

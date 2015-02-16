@@ -28,7 +28,7 @@ public class ExtractTopFeatures {
 	public static void main(String[] args) throws Exception {
 		int topk=50, counter=0;
 		String dictionaryPath = "/Users/saeedhp/Dropbox/Stanford/Code/CorpusExtraction/files/stride/abdomenCT/fullCorpus/vectors/TFIDFsparseSeqdir/dictionary.file-0";
-		String inputFile = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/tools/trainr3-3-10.txt.fscore";
+		String inputFile = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/tools/trainr2.txt.fscore";
 		String outputFileName = inputFile + "-top" + topk + "terms.txt";
 		
 		Configuration configuration = new Configuration();
