@@ -44,7 +44,7 @@ public class Evaluation {
 		}
 		
 		PrintWriter pw = new PrintWriter(dataFileFolder + "evaluation.tsv", "UTF-8");
-		pw.printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "threshold","size", "accuracy", "precision", "recall", "f1", "sensitivity", "specificity", "tpr", "fpr");
+		pw.printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "threshold","size", "accuracy", "precision", "recall", "f1", "sensitivity", "specificity", "tpr", "fpr", "ppv", "npv", "tp","fp","tn","fn");
 		computeMetrics("", 0, trueLable, prediction, pw);
 		pw.close();
 	}
@@ -75,9 +75,11 @@ public class Evaluation {
 		double specificity = tn / (tn + fp);
 		double tpr = recall;
 		double fpr = fp / (fp + tn);
+		double ppv = tp / (tp + fp);
+		double npv = tn/(tn + fn);
 		int size = trueLable.size();
 				
-		pw.printf("%.4f\t%d\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\n", threshold, size, accuracy, precision, recall, f1, sensitivity,specificity,tpr,fpr);
+		pw.printf("%.4f\t%d\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\n", threshold, size, accuracy, precision, recall, f1, sensitivity,specificity,tpr,fpr, ppv, npv, tp,fp, tn,fn);
 	}
 
 }
