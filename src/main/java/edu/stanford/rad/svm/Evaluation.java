@@ -11,8 +11,10 @@ import java.util.List;
 public class Evaluation {
 
 	public static void main(String[] args) throws IOException {
-		String tag = "test1";
-		String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/abdomenCT/t5/"+ tag +"/";
+		//String tag = "test1";
+		//String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/abdomenCT/t5/"+ tag +"/";
+		String tag = "test";
+		String dataFileFolder = "/Users/saeedhp/Dropbox/Stanford/Tools/libsvm-3.20/Data/duke/firstTry/";
 		List<Integer> trueLable = new ArrayList<Integer>();
 		List<Integer> prediction = new ArrayList<Integer>();
 		
